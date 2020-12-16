@@ -1,0 +1,68 @@
+CODIGO VERSAO > 1.8
+// Nao e necessario se usar Create.RmiResgirtu
+// rmiregistry 9999&
+
+- MODELO DE EXECUÇÃO GERAL -
+
+(Iniciação servidor):
+    java HelloServer <neste caso, inet da maquina ens1. Para descobrir, digite ifconfig no console e no campo enp15s0 descubra o inet logo na segunda linha>
+    java HelloServer 10.20.221.230
+
+(Iniciação cliente):
+    - Estando na mesma máquina do servidor:
+        java HelloClient localhost <nome_cliente>
+        java HelloClient localhost john
+
+    - Estando em máquina diferente do servidor:
+        java HelloClient <nome_maquina_que_esta_o_servidor> <nome_cliente>
+        java HelloClient ens1 john
+
+
+- MODELO DE EXECUÇÃO BASEADO NO CASO DE TESTE -
+
+1 - Primeiramente passagem dos arquivos para o SSH por meio do SCP
+
+scp -r pastaLocalDoProjeto pastaDestinoDoProjetoDiretoNoSSH
+
+Exemplo: 
+scp -r /home/nanda/Downloads/sdi0001-master/04-HelloRPC alu2020s2@ens1:/home/alu2020s2/nanda
+
+
+2 - Execução do programa:
+
+- TERMINAL 1 - Console na ens-1 -
+
+ens-1> make clean
+ens-1> make
+ens-1> java HelloServer 10.20.221.230
+
+- TERMINAL 2 - Abrir outro terminal e acessar a ens-1 -
+
+ens-1> java HelloClient localhost paul
+
+- TERMINAL 3 - Abrir outro terminal e acessar a ens-1 -
+
+ens-1> java HelloClient localhost john
+
+
+- TERMINAL 4 - Abrir outro terminal e acessar a ens-2 -
+
+ens-2> java HelloClient ens1 mary
+
+- TERMINAL 1 - Apertar 1 para enviar a mensagem e apos digitar o nome do arquivo a ser enviado (file1K.txt e file1M.txt já estão na pasta do trabalho)
+
+ens-1> 1
+ens-1> Digite o nome do arquivo:
+ens-1> file1K.txt
+
+--> O que irá acontecer: a mensagem que Paul enviou será recebida pelo servidor entitulada paul-01.serv
+
+- TERMINAL 3 e 4 - Apertar 2 para receber a mensagem enviada por Paul
+
+--> O que irá acontecer: a mensagem que Paul enviou será retransmitida para os outros dois clientes conectados ao servidor (John e Mary)
+
+RESUMINDO:
+- A cada envio de mensagem por um cliente apertando 1, é necessário que os outros clientes recebam a mesma apertando 2. (A mensagem aparecerá na pasta)
+
+
+
